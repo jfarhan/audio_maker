@@ -11,15 +11,30 @@ use test2::audio_test;
 fn main(){
     let mut count=0;
     let sampleRate=44100.0;
-    let freq=440.0;
-    let duration=2.0;
+    let freq=100.0/7000.0;                                                           //Frequency in hz
+    /*
+    =========================================================================================================
+            When the frequency is 1.0 Hz , I get 7kHz for some reason.
+            So adjust accordingly.
+    =========================================================================================================
+    */
+    let duration=2.0;                                                       //Duration of the wave in seconds
     let mut  testwave =audio_test::Wave::new(1,1,sampleRate as u32,32);
     let nsamples=(duration*sampleRate) as u32;
     testwave.set_duration(duration);
     let mut music_vec:Vec<f32>=Vec::new();
-    for i in 0..nsamples{
+
+
+    //Input sine wave into the .wav file
+
+    for time in 0..nsamples{
         let mut valvec=Vec::new();
-        let val=(i as f32).sin() as f32  ;
+        let val=(freq*(time as f32)).sin()   ;
+        /*
+        Here,input whatever function you want  as a function of time,which acts as time here.
+        so val=sin(freq*time)
+
+        */
         valvec.push(val);
         testwave.add_wave_sample(valvec);
         count+=4;
@@ -33,25 +48,6 @@ fn main(){
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 pub fn create_header_for_write()->Vec<u8>{
 
